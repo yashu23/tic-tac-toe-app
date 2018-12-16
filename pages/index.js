@@ -1,10 +1,10 @@
+let lastPlayer = 'X';
+
 function Board({ initialState }) {
   // Default is 3 X 3 Board
   const state = initialState
     ? initialState
     : [["", "", ""], ["", "", ""], ["", "", ""]];
-
-  let lastPlayer;
 
   this.getCurrentState = () => state;
 
@@ -53,24 +53,34 @@ function Board({ initialState }) {
   };
 }
 
-const state = createGrid();
-let html = "<table>";
-for (let i = 0; i < state.length; i++) {
-  html += "<tr>";
-  for (let j = 0; j < state[i].length; j++) {
-    html += "<td></td>";
+attachEventHanders = ({ state, handler }) => {
+  for(let i = 0; i < 9; i++) {
+    document.getElementById(`cell${i}`).addEventListener('click', () => {
+      document.getElementById(`cell${i}`).textContent = 'X';
+    });
   }
-  html += "</tr>";
-}
-html += "</table>";
-console.log("html", html);
-
-alert(document.getElementById("board").innerHTML);
-// document.getElementById("board").innerHTML = html;
-
-function createGrid() {
-  let board = new Board({});
-  return board.getCurrentState();
 }
 
-module.exports = Board
+drawGrid = ({ id, state }) => {
+  
+  let html = "<table class=\"boardTbl\">";
+  
+  let counter = 0;
+  
+  for (let i = 0; i < state.length; i++) {
+    html += "<tr>";
+    for (let j = 0; j < state[i].length; j++) {
+      html += `<td id="cell${counter}">${state[i][j]}</td>`;
+      counter++;
+    }
+    html += "</tr>";
+  }
+  html += "</table>";
+  console.log("html", html);  
+  document.getElementById(id).innerHTML = html;
+}
+
+let board = new Board({});
+const state = board.getCurrentState();
+drawGrid({ id: "board", state});
+attachEventHanders({ state: board.getCurrentState(), handler: () => board.al });
